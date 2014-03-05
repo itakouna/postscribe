@@ -7,12 +7,11 @@
 
 (function() {
 
-  var global = this;
+  var global = {};
+  
+  global.htmlParser = require('./htmlParser/htmlParser');
 
-  if(global.postscribe) {
-    return;
-  }
-
+  
   // Turn on to debug how each chunk affected the DOM.
   var DEBUG_CHUNK = false;
 
@@ -592,5 +591,7 @@
 
   // export postscribe
   global.postscribe = postscribe;
+
+  module.exports = postscribe;
 
 }());
