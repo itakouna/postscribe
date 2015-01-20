@@ -5,6 +5,9 @@
 //     http://krux.github.io/postscribe
 /*globals htmlParser:false*/
 (function() {
+
+  var htmlParser = require('./htmlParser/htmlParser');
+
   // A function that intentionally does nothing.
   function doNothing() {}
 
@@ -32,16 +35,12 @@
     releaseAsync: false
   };
 
-  var global = this;
+  var global = {};
 
   var UNDEFINED = void 0;
 
   function existy(thing) {
     return thing !== UNDEFINED && thing !== null;
-  }
-
-  if(global.postscribe) {
-    return;
   }
 
   // Turn on to debug how each chunk affected the DOM.
@@ -677,7 +676,7 @@
 
       el =
         // id selector
-        (/^#/).test(el) ? global.document.getElementById(el.substr(1)) :
+        (/^#/).test(el) ? document.getElementById(el.substr(1)) :
         // jquery object. TODO: loop over all elements.
         el.jquery ? el[0] : el;
 
@@ -714,4 +713,5 @@
       WriteStream: WriteStream
     });
   }());
+  module.exports = global.postscribe;
 }());
