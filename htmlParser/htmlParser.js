@@ -2,24 +2,8 @@
 // Based on http://ejohn.org/blog/pure-javascript-html-parser/
 //TODO(#39)
 /*globals console:false*/
-(function() {
-  var supports = (function() {
-    var supports = {};
-
-    var html;
-    var work = this.document.createElement('div');
-
-    html = '<P><I></P></I>';
-    work.innerHTML = html;
-    supports.tagSoup = work.innerHTML !== html;
-
-    work.innerHTML = '<P><i><P></P></i></P>';
-    supports.selfClose = work.childNodes.length === 2;
-
-    return supports;
-  })();
-
-
+(function(exports) {
+  
 
   // Regular Expressions for parsing tags and attributes
   var startTag = /^<([\-A-Za-z0-9_]+)((?:\s+[\w\-]+(?:\s*=?\s*(?:(?:"[^"]*")|(?:'[^']*')|[^>\s]+))?)*)\s*(\/?)>/;
@@ -30,13 +14,30 @@
   var DEBUG = false;
 
   function htmlParser(stream, options) {
+    this.supports = (function() {
+      var supports = {};
+
+      var html;
+      var work = this.document.createElement('div');
+
+      html = '<P><I></P></I>';
+      work.innerHTML = html;
+      supports.tagSoup = work.innerHTML !== html;
+
+      work.innerHTML = '<P><i><P></P></i></P>';
+      supports.selfClose = work.childNodes.length === 2;
+
+      return supports;
+    })();
+
+
     stream = stream || '';
 
     // Options
     options = options || {};
 
-    for(var key in supports) {
-      if(supports.hasOwnProperty(key)) {
+    for(var key in this.supports) {
+      if(this.supports.hasOwnProperty(key)) {
         if(options.autoFix) {
           options['fix_'+key] = true;//!supports[key];
         }
@@ -337,8 +338,6 @@
 
   }
 
-  htmlParser.supports = supports;
-
   htmlParser.tokenToString = function(tok) {
     var handler = {
       comment: function(tok) {
@@ -387,9 +386,9 @@
     return escapedAttrs;
   };
 
-  for(var key in supports) {
+  for(var key in htmlParser.supports) {
     htmlParser.browserHasFlaw = htmlParser.browserHasFlaw || (!supports[key]) && key;
   }
 
-  this.htmlParser = htmlParser;
+  module.exports = htmlParser;
 })();

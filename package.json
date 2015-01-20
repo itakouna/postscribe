@@ -66,8 +66,6 @@
   "engines": {
     "node": ">=0.10"
   },
-  "main": "postscribe.js",
-  "filename": "postscribe.min.js",
   "scripts": {
     "lint": "grunt jshint",
     "tdd": "grunt watch",
